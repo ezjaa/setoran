@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Setoran Harian - Final Layout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        :root {
+            --color-primary: #2c3e50;
+            --color-secondary: #7f8c8d;
+            --color-background: #ecf0f1;
+            --color-card: #ffffff;
+            --color-border: #bdc3c7;
+            --color-accent: #3498db;
+            --color-success: #27ae60;
+            --color-danger: #e74c3c;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-primary);
+            line-height: 1.6;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        /* --- Global Card & Form Styles --- */
+        #setoranForm, #catatanBox, #totalBox {
+            background-color: var(--color-card);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+        
+        .input-group input {
+            width: 100%; padding: 12px 15px; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 15px;
+            border: 1px solid var(--color-border);
+        }
+        
+        .input-group button {
+            width: 100%; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none;
+            background-color: var(--color-accent);
+            color: white;
+        }
+
+        /* --- Catatan Item Styles (REVISI STRUKTUR) --- */
+        .catatan-item {
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: #fcfcfc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column; /* Struktur utama adalah kolom */
+        }
+        
+        .catatan-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* HEADER CATATAN (Nama dan Tanggal di Bagian Atas) */
+        .catatan-header {
+            padding: 15px 15px 10px;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .catatan-header strong {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .catatan-header strong i {
+            margin-right: 8px;
+            color: var(--color-accent);
+        }
+        
+        .catatan-header .detail-tanggal {
+            font-size: 12px;
+            color: var(--color-secondary);
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+        }
+        
+        .catatan-header .detail-tanggal i {
+             margin-right: 5px;
+        }
+        
+        /* BODY CATATAN (Detail Uang) */
+        .catatan-body {
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .catatan-body span {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 15px;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .catatan-body .label {
+            font-weight: 600;
+            color: var(--color-secondary);
+            margin-right: 5px;
+        }
+        
+        .catatan-body i {
+             font-size: 12px;
+             color: var(--color-secondary);
+        }
+
+        /* FOOTER CATATAN (Setoran dan Delete di Bagian Bawah) */
+        .catatan-footer {
+            padding: 10px 15px;
+            border-top: 1px solid var(--color-border);
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .catatan-setor {
+            font-weight: 700;
+            color: var(--color-success);
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        /* --- Tombol Delete --- */
+        .delete-btn {
+            background-color: var(--color-danger);
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: background-color 0.2s, transform 0.2s;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .delete-btn i {
+             margin-right: 5px;
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b;
+            transform: scale(1.05);
+        }
+
+        /* --- Total Box Styles --- */
+        #totalBox {
+            padding: 20px 30px; display: flex; justify-content: space-between; align-items: center;
+            border-left: 5px solid var(--color-success);
+        }
+
+        #totalSetor {
+            font-size: 28px; font-weight: 700; color: var(--color-success);
+        }
+    </style>
+</head>
+<body onload="loadCatatan()">
+    <div class="container">
+        <section id="setoranForm">
+            <h2>Setoran</h2>
+            <div class="input-group">
+                <input type="text" id="inputNama" placeholder="Nama" required>
+            </div>
+            <div class="input-group">
+                <input type="number" id="inputBawa" placeholder="Bawa" required min="0">
+            </div>
+            <div class="input-group">
+                <input type="number" id="inputHabis" placeholder="Habis" required min="0">
+            </div>
+            <div class="input-group">
+                <input type="number" id="inputSisa" placeholder="Sisa" required min="0">
+            </div>
+            <div class="input-group">
+                <input type="number" id="inputSetor" placeholder="Setor" required min="0">
+            </div>
+            <div class="input-group">
+                <button type="button" onclick="tambahCatatan()">Simpan Catatan</button>
+            </div>
+        </section>
+
+        <section id="catatanBox">
+            <h3>Riwayat Setoran</h3>
+            <div id="catatanList">
+                <p style="text-align: center; color: var(--color-secondary);">Belum ada catatan setoran.</p>
+            </div>
+        </section>
+
+        <section id="totalBox">
+            <p>Total Semua Setoran:</p>
+            <div id="totalSetor">Rp0</div>
+        </section>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'riwayatSetoranApp';
+        const catatanList = document.getElementById('catatanList');
+        const totalSetorElement = document.getElementById('totalSetor');
+        let riwayatSetoran = [];
+
+        // --- FUNGSI UTILITY ---
+        const formatRupiah = (angka) => {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(angka);
+        };
+        
+        const formatAngkaBiasa = (angka) => {
+            return new Intl.NumberFormat('id-ID').format(angka);
+        };
+        
+        // --- FUNGSI LOCAL STORAGE ---
+        function loadCatatan() {
+            const storedData = localStorage.getItem(STORAGE_KEY);
+            if (storedData) {
+                riwayatSetoran = JSON.parse(storedData).map(catatan => ({
+                    ...catatan,
+                    setor: parseInt(catatan.setor)
+                }));
+            }
+            renderCatatan();
+            hitungTotalSetoran();
+        }
+
+        function saveCatatan() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(riwayatSetoran));
+        }
+
+        // --- FUNGSI UTAMA ---
+        function hitungTotalSetoran() {
+            const totalSemuaSetoran = riwayatSetoran.reduce((total, catatan) => total + catatan.setor, 0);
+            totalSetorElement.textContent = formatRupiah(totalSemuaSetoran);
+        }
+
+        function tambahCatatan() {
+            const nama = document.getElementById('inputNama').value;
+            const bawa = parseInt(document.getElementById('inputBawa').value) || 0;
+            const habis = parseInt(document.getElementById('inputHabis').value) || 0;
+            const sisa = parseInt(document.getElementById('inputSisa').value) || 0;
+            const setor = parseInt(document.getElementById('inputSetor').value) || 0;
+
+            if (!nama || setor <= 0) {
+                alert('Nama dan jumlah Setor harus diisi, dan Setor harus lebih dari 0.');
+                return;
+            }
+
+            const catatanBaru = {
+                id: Date.now(),
+                nama,
+                bawa: formatAngkaBiasa(bawa),
+                habis: formatAngkaBiasa(habis),
+                sisa: formatAngkaBiasa(sisa),
+                setor: setor,
+                tanggal: new Date().toLocaleDateString('id-ID')
+            };
+
+            riwayatSetoran.unshift(catatanBaru);
+            saveCatatan();
+            renderCatatan();
+            hitungTotalSetoran();
+
+            document.getElementById('setoranForm').reset();
+        }
+
+        function hapusCatatan(id) {
+            const konfirmasi = confirm(`Apakah kamu yakin ingin menghapus catatan dari ${riwayatSetoran.find(c => c.id === id)?.nama}?`);
+
+            if (konfirmasi) {
+                riwayatSetoran = riwayatSetoran.filter(catatan => catatan.id !== id);
+                saveCatatan();
+                renderCatatan();
+                hitungTotalSetoran();
+            }
+        }
+
+        // --- FUNGSI RENDER DENGAN LAYOUT HEADER/FOOTER ---
+        function renderCatatan() {
+            catatanList.innerHTML = '';
+
+            if (riwayatSetoran.length === 0) {
+                 catatanList.innerHTML = '<p style="text-align: center; color: var(--color-secondary);">Belum ada catatan setoran.</p>';
+                return;
+            }
+
+            riwayatSetoran.forEach(catatan => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'catatan-item';
+                
+                // 1. HEADER CATATAN (Nama & Tanggal)
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'catatan-header';
+                headerDiv.innerHTML = `
+                    <strong><i class="bi bi-person-fill"></i> ${catatan.nama}</strong> 
+                    <span class="detail-tanggal"><i class="bi bi-calendar-event"></i> Tanggal: ${catatan.tanggal}</span>
+                `;
+                
+                // 2. BODY CATATAN (Detail Uang Bawa, Habis, Sisa)
+                const bodyDiv = document.createElement('div');
+                bodyDiv.className = 'catatan-body';
+                bodyDiv.innerHTML = `
+                    <span><span class="label"><i class="bi bi-wallet-fill"></i> Bawa:</span> <span class="plain-number">${catatan.bawa}</span></span>
+                    <span><span class="label"><i class="bi bi-cash-stack"></i> Habis:</span> <span class="plain-number">${catatan.habis}</span></span>
+                    <span><span class="label"><i class="bi bi-box-seam-fill"></i> Sisa:</span> <span class="plain-number">${catatan.sisa}</span></span>
+                `;
+
+                // 3. FOOTER CATATAN (Delete & Setoran)
+                const footerDiv = document.createElement('div');
+                footerDiv.className = 'catatan-footer';
+                footerDiv.innerHTML = `
+                    <button class="delete-btn" onclick="hapusCatatan(${catatan.id})" title="Hapus Catatan">
+                        <i class="bi bi-trash-fill"></i> Hapus
+                    </button>
+                    
+                    <span class="catatan-setor">${formatRupiah(catatan.setor)}</span>
+                `;
+
+                itemDiv.appendChild(headerDiv);
+                itemDiv.appendChild(bodyDiv);
+                itemDiv.appendChild(footerDiv);
+
+                catatanList.appendChild(itemDiv);
+            });
+        }
+    </script>
+</body>
+</html>
