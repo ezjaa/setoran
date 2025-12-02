@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Setoran Harian - Final Layout</title>
+    <title>Website Setoran Harian - Final</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
@@ -17,6 +17,7 @@
             --color-accent: #3498db;
             --color-success: #27ae60;
             --color-danger: #e74c3c;
+            --color-warning: #f39c12; 
         }
 
         body {
@@ -50,22 +51,37 @@
             border: 1px solid var(--color-border);
         }
         
-        .input-group button {
-            width: 100%; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none;
-            background-color: var(--color-accent);
+        /* Grup Tombol untuk Simpan dan Reset */
+        .button-group {
+            display: flex;
+            gap: 10px; 
+            margin-top: 10px;
+        }
+        
+        .button-group button {
+            flex: 1; 
+            padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none;
             color: white;
+            transition: background-color 0.2s;
         }
 
-        /* --- Catatan Item Styles (REVISI STRUKTUR) --- */
+        .button-group #btnSimpan {
+            background-color: var(--color-accent);
+        }
+        
+        .button-group #btnReset {
+            background-color: var(--color-warning); 
+        }
+
+        /* --- Catatan Item Styles (Layout sama) --- */
         .catatan-item {
             border: 1px solid var(--color-border);
             border-radius: 8px;
             margin-bottom: 15px;
             background-color: #fcfcfc;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s;
             display: flex;
-            flex-direction: column; /* Struktur utama adalah kolom */
+            flex-direction: column; 
         }
         
         .catatan-item:hover {
@@ -73,7 +89,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         
-        /* HEADER CATATAN (Nama dan Tanggal di Bagian Atas) */
+        /* HEADER CATATAN */
         .catatan-header {
             padding: 15px 15px 10px;
             border-bottom: 1px solid var(--color-border);
@@ -86,25 +102,7 @@
             font-weight: 700;
             margin-bottom: 5px;
         }
-
-        .catatan-header strong i {
-            margin-right: 8px;
-            color: var(--color-accent);
-        }
         
-        .catatan-header .detail-tanggal {
-            font-size: 12px;
-            color: var(--color-secondary);
-            font-weight: 400;
-            display: flex;
-            align-items: center;
-        }
-        
-        .catatan-header .detail-tanggal i {
-             margin-right: 5px;
-        }
-        
-        /* BODY CATATAN (Detail Uang) */
         .catatan-body {
             padding: 10px 15px;
             display: flex;
@@ -113,25 +111,22 @@
         }
         
         .catatan-body span {
+            /* Diberi lebar lebih kecil agar Bonus bisa masuk */
             display: inline-flex;
             align-items: center;
             margin-right: 15px;
             font-size: 14px;
             margin-bottom: 5px;
+            flex: 1 1 45%; /* Memungkinkan 2 item per baris pada layar sempit */
         }
-
+        
         .catatan-body .label {
             font-weight: 600;
             color: var(--color-secondary);
             margin-right: 5px;
         }
-        
-        .catatan-body i {
-             font-size: 12px;
-             color: var(--color-secondary);
-        }
 
-        /* FOOTER CATATAN (Setoran dan Delete di Bagian Bawah) */
+        /* FOOTER CATATAN */
         .catatan-footer {
             padding: 10px 15px;
             border-top: 1px solid var(--color-border);
@@ -149,7 +144,6 @@
             line-height: 1;
         }
 
-        /* --- Tombol Delete --- */
         .delete-btn {
             background-color: var(--color-danger);
             border: none;
@@ -158,29 +152,19 @@
             font-size: 14px;
             padding: 6px 10px;
             border-radius: 6px;
-            transition: background-color 0.2s, transform 0.2s;
             line-height: 1;
             display: flex;
             align-items: center;
         }
-
+        
         .delete-btn i {
              margin-right: 5px;
-        }
-
-        .delete-btn:hover {
-            background-color: #c0392b;
-            transform: scale(1.05);
         }
 
         /* --- Total Box Styles --- */
         #totalBox {
             padding: 20px 30px; display: flex; justify-content: space-between; align-items: center;
             border-left: 5px solid var(--color-success);
-        }
-
-        #totalSetor {
-            font-size: 28px; font-weight: 700; color: var(--color-success);
         }
     </style>
 </head>
@@ -201,11 +185,21 @@
                 <input type="number" id="inputSisa" placeholder="Sisa" required min="0">
             </div>
             <div class="input-group">
-                <input type="number" id="inputSetor" placeholder="Setor" required min="0">
+                <input type="number" id="inputBonus" placeholder="Bonus" required min="0">
             </div>
             <div class="input-group">
-                <button type="button" onclick="tambahCatatan()">Simpan Catatan</button>
+                <input type="number" id="inputSetor" placeholder="Setor" required min="0">
             </div>
+            
+            <div class="button-group">
+                <button type="button" id="btnSimpan" onclick="tambahCatatan()">
+                    <i class="bi bi-save-fill"></i> Tambah Catatan
+                </button>
+                <button type="button" id="btnReset" onclick="resetForm()">
+                    <i class="bi bi-arrow-counterclockwise"></i> Reset Form
+                </button>
+            </div>
+            
         </section>
 
         <section id="catatanBox">
@@ -217,7 +211,7 @@
 
         <section id="totalBox">
             <p>Total Semua Setoran:</p>
-            <div id="totalSetor">Rp0</div>
+            <div id="totalSetor" style="font-weight: bold; color: rgba(12, 148, 12, 1); font-size: 1.3rem">Rp0</div>
         </section>
     </div>
 
@@ -246,7 +240,9 @@
             if (storedData) {
                 riwayatSetoran = JSON.parse(storedData).map(catatan => ({
                     ...catatan,
-                    setor: parseInt(catatan.setor)
+                    // Pastikan Setor dan Bonus dikonversi ke integer untuk perhitungan yang aman
+                    setor: parseInt(catatan.setor) || 0,
+                    bonus: parseInt(catatan.bonus) || 0 
                 }));
             }
             renderCatatan();
@@ -263,11 +259,21 @@
             totalSetorElement.textContent = formatRupiah(totalSemuaSetoran);
         }
 
+        function resetForm() {
+            document.getElementById('inputNama').value = '';
+            document.getElementById('inputBawa').value = '';
+            document.getElementById('inputHabis').value = '';
+            document.getElementById('inputSisa').value = '';
+            document.getElementById('inputBonus').value = ''; 
+            document.getElementById('inputSetor').value = '';
+        }
+
         function tambahCatatan() {
             const nama = document.getElementById('inputNama').value;
             const bawa = parseInt(document.getElementById('inputBawa').value) || 0;
             const habis = parseInt(document.getElementById('inputHabis').value) || 0;
             const sisa = parseInt(document.getElementById('inputSisa').value) || 0;
+            const bonus = parseInt(document.getElementById('inputBonus').value) || 0; 
             const setor = parseInt(document.getElementById('inputSetor').value) || 0;
 
             if (!nama || setor <= 0) {
@@ -281,6 +287,7 @@
                 bawa: formatAngkaBiasa(bawa),
                 habis: formatAngkaBiasa(habis),
                 sisa: formatAngkaBiasa(sisa),
+                bonus: formatAngkaBiasa(bonus), 
                 setor: setor,
                 tanggal: new Date().toLocaleDateString('id-ID')
             };
@@ -290,7 +297,7 @@
             renderCatatan();
             hitungTotalSetoran();
 
-            document.getElementById('setoranForm').reset();
+            resetForm(); 
         }
 
         function hapusCatatan(id) {
@@ -304,7 +311,7 @@
             }
         }
 
-        // --- FUNGSI RENDER DENGAN LAYOUT HEADER/FOOTER ---
+        // --- FUNGSI RENDER DENGAN BONUS ---
         function renderCatatan() {
             catatanList.innerHTML = '';
 
@@ -317,7 +324,7 @@
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'catatan-item';
                 
-                // 1. HEADER CATATAN (Nama & Tanggal)
+                // 1. HEADER CATATAN
                 const headerDiv = document.createElement('div');
                 headerDiv.className = 'catatan-header';
                 headerDiv.innerHTML = `
@@ -325,16 +332,17 @@
                     <span class="detail-tanggal"><i class="bi bi-calendar-event"></i> Tanggal: ${catatan.tanggal}</span>
                 `;
                 
-                // 2. BODY CATATAN (Detail Uang Bawa, Habis, Sisa)
+                // 2. BODY CATATAN (Termasuk Bonus)
                 const bodyDiv = document.createElement('div');
                 bodyDiv.className = 'catatan-body';
                 bodyDiv.innerHTML = `
                     <span><span class="label"><i class="bi bi-wallet-fill"></i> Bawa:</span> <span class="plain-number">${catatan.bawa}</span></span>
                     <span><span class="label"><i class="bi bi-cash-stack"></i> Habis:</span> <span class="plain-number">${catatan.habis}</span></span>
                     <span><span class="label"><i class="bi bi-box-seam-fill"></i> Sisa:</span> <span class="plain-number">${catatan.sisa}</span></span>
-                `;
+                    <span><span class="label"><i class="bi bi-gift-fill"></i> Bonus:</span> <span class="plain-number">${catatan.bonus}</span></span>
+                    `;
 
-                // 3. FOOTER CATATAN (Delete & Setoran)
+                // 3. FOOTER CATATAN
                 const footerDiv = document.createElement('div');
                 footerDiv.className = 'catatan-footer';
                 footerDiv.innerHTML = `
@@ -355,3 +363,4 @@
     </script>
 </body>
 </html>
+
